@@ -59,6 +59,7 @@ saveAllPokemonEvoChainIDs();
 // init
 async function init() {
   addPopup();
+  document.getElementById("error").classList.add("d-none");
   numberOfPokemons = 18;
   rendertPokemons = allPokemons;
 
@@ -132,7 +133,6 @@ async function searchPokemon() {
   addPopup();
   document.getElementById("search-bar").disabled = true;
   numberOfPokemons = 18;
-  let errorText = document.getElementById("error");
   let searchBarValue = document.getElementById("search-bar").value.trim().toLowerCase();
   let filteredPokemons = allPokemons.filter((pokemon) =>
     pokemon.toLowerCase().startsWith(searchBarValue)
@@ -142,7 +142,7 @@ async function searchPokemon() {
     rendertPokemons = allPokemons;
   } else if (filteredPokemons.length <= 0) {
     rendertPokemons = allPokemons;
-    errorText.classList.remove("d-none");
+    document.getElementById("error").classList.remove("d-none");
     await renderPokemonCards();
     removePopup();
     document.getElementById("search-bar").disabled = false;
@@ -151,7 +151,7 @@ async function searchPokemon() {
   } else if (filteredPokemons.length < 19) {
     numberOfPokemons = filteredPokemons.length;
   }
-  errorText.classList.add("d-none");
+  document.getElementById("error").classList.add("d-none");
   await renderPokemonCards();
   removePopup();
   document.getElementById("search-bar").disabled = false;
