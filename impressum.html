@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="icon" href="img/pokeball.png" />
+
+    <title>Imprint</title>
+
+    <link rel="stylesheet" href="style.css" />
+
+    <style>
+      header {
+        padding: 0;
+
+        display: flex;
+        justify-content: center;
+      }
+
+      main {
+        padding: 0;
+
+        color: white;
+
+        line-height: 25px;
+      }
+
+      #imp-container {
+        text-align: center;
+      }
+
+      .imp-link {
+        color: rgb(255, 248, 0);
+        text-decoration: underline;
+      }
+
+      footer {
+        position: fixed;
+        bottom: 0;
+
+        justify-content: space-around;
+      }
+    </style>
+  </head>
+
+  <body onload="startAnimation()">
+    <!-- header -->
+    <header>
+      <a href="index.html">
+        <div id="headline-container">
+          <div id="pokemon-img-container">
+            <img id="pokemon-img" class="pokemon-img" src="img/pikachu.png" alt="Pokemon" />
+            <img
+              id="next-pokemon-img"
+              class="pokemon-img next-pokemon-img"
+              src="img/charmander.png"
+              alt="Next Pokemon"
+            />
+          </div>
+          <h1>Pokedex</h1>
+        </div></a
+      >
+    </header>
+
+    <!-- main -->
+    <main>
+      <div id="imp-container">
+        <div class="imp-item">
+          <h2 class="imp-headline">Impressum</h2>
+          <p>
+            Ayyub Qarar<br />
+            Tassiloplatz 25<br />
+            81541 M&uuml;nchen
+          </p>
+        </div>
+
+        <div class="imp-item">
+          <h2>Kontakt</h2>
+          <p>
+            Telefon: 01234 9870073<br />
+            E-Mail: aq-computer@outlook.com
+          </p>
+        </div>
+
+        <p>Quelle: <a class="imp-link" href="https://www.e-recht24.de">eRecht24</a></p>
+      </div>
+    </main>
+
+    <!-- footer -->
+    <footer>
+      <p>2024</p>
+
+      <a>Imprint</a>
+    </footer>
+
+    <script src="animation.js"></script>
+  </body>
+</html>

@@ -6,6 +6,93 @@
 
     <link rel="icon" href="img/pokeball.png" />
     <title>Pokedex</title>
+
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js"></script>
+    <script src="animation.js"></script>
+    <script src="bigPokemonCard.js"></script>
+    <script src="pokemonCard.js"></script>
   </head>
-  <body></body>
+  <body onload="init(),startAnimation()">
+    <header>
+      <a href="#" onclick="init()">
+        <div id="headline-container">
+          <div id="pokemon-img-container">
+            <img id="pokemon-img" class="pokemon-img" src="img/pikachu.png" alt="Pokemon" />
+            <img
+              id="next-pokemon-img"
+              class="pokemon-img next-pokemon-img"
+              src="img/charmander.png"
+              alt="Next Pokemon"
+            />
+          </div>
+          <h1>Pokedex</h1>
+        </div></a
+      >
+
+      <input oninput="startSearch()" placeholder="Search Pokemon..." id="search-bar" type="text" />
+
+      <p id="error" class="d-none">No Pokémon found that starts with these letters.</p>
+    </header>
+
+    <main>
+      <div id="pokemon-cards-container"></div>
+      <button onclick="startRenderMore()" id="load-more-button">Load More ...</button>
+    </main>
+
+    <!-- big pokemon card -->
+
+    <div
+      id="big-pokemon-card-bg"
+      onclick="closeBigPokemonCard()"
+      class="big-pokemon-card-bg bg-op-0"
+    >
+      <div id="big-pokemon-card" class="big-pokemon-card scale-0" onclick="stopEvent(event)">
+        <div id="big-pokemon-card-top">
+          <div id="big-pokemon-card-header"></div>
+
+          <div id="big-pokemon-card-image-types-container">
+            <div id="big-pokemon-card-types-container"></div>
+
+            <img class="big-pokemon-card-bg-img" src="img/pokeball bg.png" alt="" />
+            <img id="big-pokemon-card-image" src="" />
+          </div>
+        </div>
+
+        <div id="big-pokemon-card-main-container">
+          <nav id="big-pokemon-card-nav" class="big-pokemon-card-nav"></nav>
+
+          <div id="big-pokemon-card-main" class="big-pokemon-card-main"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- arrows -->
+    <img
+      id="big-pokemon-card-left-arrow"
+      class="big-pokemon-card-left-arrow left-arrow-icon-scale-0"
+      src="img/pfeil-rechts.png"
+      alt=""
+      onclick="previousBigPokemonCard()"
+    />
+    <img
+      id="big-pokemon-card-right-arrow"
+      class="big-pokemon-card-right-arrow right-arrow-icon-scale-0"
+      src="img/pfeil-rechts.png"
+      alt=""
+      onclick="nextBigPokemonCard()"
+    />
+
+    <!-- popup -->
+    <div id="loading-popup-container" class="loading-popup-container">
+      <div id="loading-popup" class="loading-popup popup-scale-0">
+        <!-- <h3>Loading...</h3> -->
+        <img id="loading-img" src="img/spiel.png" alt="Loading..." />
+      </div>
+    </div>
+
+    <footer>
+      <a id="imp" href="impressum.html">Imprint</a>
+    </footer>
+  </body>
 </html>
