@@ -45,10 +45,7 @@ let typeElementBgJson = {
 
 let numberOfPokemons = 18;
 
-let aI;
-
 allPokemons = [];
-
 allEvoChains = [];
 
 rendertPokemons = [];
