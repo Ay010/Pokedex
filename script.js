@@ -50,12 +50,21 @@ allEvoChains = [];
 
 rendertPokemons = [];
 
+saved = false;
+
 let timeout;
+
 // init
 async function init() {
   addPopup();
-  await saveAllPokemonNames();
-  await saveAllPokemonEvoChainIDs();
+
+  if (!saved) {
+    await saveAllPokemonNames();
+    await saveAllPokemonEvoChainIDs();
+    saved = true;
+  }
+
+  showLoadMoreButton();
 
   document.getElementById("error").classList.add("d-none");
   numberOfPokemons = 18;
@@ -120,8 +129,8 @@ async function saveAllPokemonEvoChainIDs() {
     }
     allEvoChains.push({
       "first-evolution": PokemonSpecies,
-      "second-evolution": PokemonEvolvesTo,
-      "third-evolution": PokemonEvolvesLast,
+      "second-evolution": allPokemons.includes(PokemonEvolvesTo) ? PokemonEvolvesTo : undefined,
+      "third-evolution": allPokemons.includes(PokemonEvolvesLast) ? PokemonEvolvesLast : undefined,
     });
   }
 }

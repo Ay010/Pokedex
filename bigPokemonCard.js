@@ -345,16 +345,15 @@ async function checkIfFirstPokemonEvoExists(chain, bigPokemonCardMain, basicPoke
 async function checkIfSecondPokemonEvoExists(chain, bigPokemonCardMain, basicPokemonType, i) {
   // if 2
   if (chain["second-evolution"]) {
-    if (secondPokemonJson["sprites"]["other"]["official-artwork"]["front_default"]) {
-      let secondPokemonJson = await getPokemonData("/" + chain["second-evolution"]);
-      secondPokemonImage = secondPokemonJson["sprites"]["other"]["official-artwork"]["front_default"];
-      let secondShinyPokemonGif = secondPokemonJson["sprites"]["other"]["showdown"]["front_shiny"];
-      let secondPokemonGif = secondPokemonJson["sprites"]["other"]["showdown"]["front_default"];
-      let secondPokemonSrc = secondPokemonGif;
-      if (secondPokemonGif === "null" || secondPokemonGif === null || secondPokemonGif === undefined || secondPokemonGif === "undefined") {
-        secondPokemonSrc = secondPokemonImage;
-      }
-      bigPokemonCardMain.innerHTML += /*html*/ `
+    let secondPokemonJson = await getPokemonData("/" + chain["second-evolution"]);
+    secondPokemonImage = secondPokemonJson["sprites"]["other"]["official-artwork"]["front_default"];
+    let secondShinyPokemonGif = secondPokemonJson["sprites"]["other"]["showdown"]["front_shiny"];
+    let secondPokemonGif = secondPokemonJson["sprites"]["other"]["showdown"]["front_default"];
+    let secondPokemonSrc = secondPokemonGif;
+    if (secondPokemonGif === "null" || secondPokemonGif === null || secondPokemonGif === undefined || secondPokemonGif === "undefined") {
+      secondPokemonSrc = secondPokemonImage;
+    }
+    bigPokemonCardMain.innerHTML += /*html*/ `
                 <svg style='fill: ${allTypes[basicPokemonType]}' class="big-pokemon-card-chain-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100" height="100">
                   <path  d="M5.59 7.41L7 6 13 12 7 18 5.59 16.59 10.17 12 5.59 7.41zM11.59 7.41L13 6 19 12 13 18 11.59 16.59 16.17 12 11.59 7.41z"/>
                 </svg>
@@ -365,9 +364,8 @@ async function checkIfSecondPokemonEvoExists(chain, bigPokemonCardMain, basicPok
                 </div>
                 `;
 
-      // if 3
-      checkIfThirdPokemonEvoExists(chain, bigPokemonCardMain, basicPokemonType, i);
-    }
+    // if 3
+    checkIfThirdPokemonEvoExists(chain, bigPokemonCardMain, basicPokemonType, i);
   }
 }
 
