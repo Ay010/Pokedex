@@ -169,9 +169,13 @@ main {
   align-items: center;
   flex-direction: column;
 
-  margin: 130px 0 30px 0;
+  margin: 120px 0 30px 0;
+  padding-top: 15px;
 
-  min-height: calc(100vh - 260px);
+  min-height: calc(100vh - 250px);
+
+  background: linear-gradient(130deg, rgba(61, 125, 202, 0.2) 0%, rgba(61, 125, 202, 0.1) 10%, rgba(61, 125, 202, 0) 20%, rgb(5, 22, 31) 20%);
+  background-attachment: fixed;
 }
 
 /* pokemon card */
