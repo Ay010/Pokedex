@@ -15,16 +15,11 @@
   </head>
   <body onload="init(),startAnimation()">
     <header>
-      <a href="#" onclick="init()">
+      <a onclick="init(); scrollToTop()">
         <div id="headline-container">
           <div id="pokemon-img-container">
             <img id="pokemon-img" class="pokemon-img" src="img/pikachu.png" alt="Pokemon" />
-            <img
-              id="next-pokemon-img"
-              class="pokemon-img next-pokemon-img"
-              src="img/charmander.png"
-              alt="Next Pokemon"
-            />
+            <img id="next-pokemon-img" class="pokemon-img next-pokemon-img" src="img/charmander.png" alt="Next Pokemon" />
           </div>
           <h1>Pokedex</h1>
         </div></a
@@ -41,12 +36,7 @@
     </main>
 
     <!-- big pokemon card -->
-
-    <div
-      id="big-pokemon-card-bg"
-      onclick="closeBigPokemonCard()"
-      class="big-pokemon-card-bg bg-op-0"
-    >
+    <div id="big-pokemon-card-bg" onclick="closeBigPokemonCard()" class="big-pokemon-card-bg bg-op-0">
       <div id="big-pokemon-card" class="big-pokemon-card scale-0" onclick="stopEvent(event)">
         <div id="big-pokemon-card-top">
           <div id="big-pokemon-card-header"></div>
@@ -86,13 +76,26 @@
     <!-- popup -->
     <div id="loading-popup-container" class="loading-popup-container">
       <div id="loading-popup" class="loading-popup popup-scale-0">
-        <!-- <h3>Loading...</h3> -->
-        <img id="loading-img" src="img/spiel.png" alt="Loading..." />
+        <div id="loading-popup-ball" class="loading-popup-ball">
+          <img id="loading-img" src="img/spiel.png" alt="Loading..." />
+        </div>
+        <div class="loading-popup-bar">
+          <div
+            style="width: 0%; transition: width 0s ease-in-out, background-color 1s ease-in-out"
+            class="loading-popup-bar-fill"
+            id="loading-popup-bar-fill"
+          ></div>
+        </div>
       </div>
     </div>
 
     <footer>
       <a id="imp" href="impressum.html">Imprint</a>
+
+      <svg id="top-button" onclick="scrollToTop()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <title>arrow-up-bold-circle</title>
+        <path d="M12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22M12,7L7,12H10V16H14V12H17L12,7Z" />
+      </svg>
     </footer>
   </body>
 </html>

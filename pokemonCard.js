@@ -4,7 +4,13 @@ async function renderPokemonCards(path = "/") {
   pokemonCardsContainer.innerHTML = "";
 
   for (let i = 0; i < numberOfPokemons; i++) {
+    updateLoadingPopupBarFill(i, numberOfPokemons);
+
     let PokemonJson = await getPokemonData(path + rendertPokemons[i]);
+
+    if (PokemonJson === undefined) {
+      continue;
+    }
     let PokemonName = PokemonJson["name"];
     let basicPokemonType = PokemonJson["types"][0]["type"]["name"];
     let PokemonTypes = PokemonJson["types"];
@@ -103,6 +109,7 @@ let lastRenderMoreTimeout;
 
 function startRenderMore() {
   clearTimeout(lastRenderMoreTimeout);
+
   lastRenderMoreTimeout = setTimeout(() => {
     renderMorePokemonCards();
   }, 500);
@@ -111,24 +118,40 @@ function startRenderMore() {
 // render more pokemon cards
 async function renderMorePokemonCards() {
   addPopup();
+
   let searchBarValue = document.getElementById("search-bar").value.trim().toLowerCase();
-  let filteredPokemons = allPokemons.filter((pokemon) =>
-    pokemon.toLowerCase().startsWith(searchBarValue)
-  );
+  let filteredPokemons = allPokemons.filter((pokemon) => pokemon.toLowerCase().includes(searchBarValue));
   let newNumberOfPokemons = numberOfPokemons + 18;
+
+  if (filteredPokemons.length > newNumberOfPokemons) {
+    showLoadMoreButton();
+    console.log("show");
+  } else {
+    hideLoadMoreButton();
+    console.log("hide");
+  }
 
   if (filteredPokemons.length <= newNumberOfPokemons) {
     numberOfPokemons = filteredPokemons.length;
     rendertPokemons = filteredPokemons;
 
     await renderPokemonCards();
+    setTimeout(() => {
+      scrollToBottom();
+    }, 100);
     removePopup();
     return;
   } else {
     numberOfPokemons = newNumberOfPokemons;
     rendertPokemons = filteredPokemons;
   }
+
   await renderPokemonCards();
+
+  setTimeout(() => {
+    scrollToBottom();
+  }, 100);
+
   removePopup();
 }
 

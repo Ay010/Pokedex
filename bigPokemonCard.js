@@ -14,12 +14,8 @@ function openBigPokemonCard(
   document.getElementById("big-pokemon-card-bg").classList.remove("bg-op-0");
   document.getElementById("big-pokemon-card").classList.remove("scale-0");
   document.body.style.overflow = "hidden";
-  document
-    .getElementById("big-pokemon-card-right-arrow")
-    .classList.remove("right-arrow-icon-scale-0");
-  document
-    .getElementById("big-pokemon-card-left-arrow")
-    .classList.remove("left-arrow-icon-scale-0");
+  document.getElementById("big-pokemon-card-right-arrow").classList.remove("right-arrow-icon-scale-0");
+  document.getElementById("big-pokemon-card-left-arrow").classList.remove("left-arrow-icon-scale-0");
   renderBigPokemonCard(
     PokemonName,
     PokemonID,
@@ -227,21 +223,11 @@ function renderBigPokemonCardMain(PokemonHeight, PokemonWeight, PokemonBaseEx, P
   document.getElementById("stats-li").classList.remove("aktiv-li");
   document.getElementById("evo-chain-li").classList.remove("aktiv-li");
 
-  bigPokemonCardMain.innerHTML = returnBigPokemonCardMainHTML(
-    PokemonHeight,
-    PokemonWeight,
-    PokemonBaseEx,
-    PokemonAbilities
-  );
+  bigPokemonCardMain.innerHTML = returnBigPokemonCardMainHTML(PokemonHeight, PokemonWeight, PokemonBaseEx, PokemonAbilities);
 }
 
 // returnBigPokemonCardMainHTML
-function returnBigPokemonCardMainHTML(
-  PokemonHeight,
-  PokemonWeight,
-  PokemonBaseEx,
-  PokemonAbilities
-) {
+function returnBigPokemonCardMainHTML(PokemonHeight, PokemonWeight, PokemonBaseEx, PokemonAbilities) {
   return /*html*/ `
   
         <!-- height -->
@@ -284,11 +270,7 @@ async function renderBigPokemonCardStats(PokemonName, basicPokemonType) {
   for (let j = 0; j < PokemonStats.length; j++) {
     let PokemonStatNumber = PokemonStats[j]["base_stat"];
     let PokemonStatName = PokemonStats[j]["stat"]["name"];
-    bigPokemonCardMain.innerHTML += returnBigPokemonCardStatHTML(
-      PokemonStatName,
-      PokemonStatNumber,
-      basicPokemonType
-    );
+    bigPokemonCardMain.innerHTML += returnBigPokemonCardStatHTML(PokemonStatName, PokemonStatNumber, basicPokemonType);
     setTimeout(() => {
       const bars = document.querySelectorAll(".bar");
       bars.forEach((bar) => {
@@ -309,9 +291,7 @@ function returnBigPokemonCardStatHTML(PokemonStatName, PokemonStatNumber, basicP
           <p class='stat-number'>${PokemonStatNumber}</p>
           
           <div class="bar-container">
-            <div  class="bar" style="width: 0%; background-color: ${
-              allTypes[basicPokemonType]
-            }" data-width="${PokemonStatNumber / 2}%"></div>
+            <div  class="bar" style="width: 0%; background-color: ${allTypes[basicPokemonType]}" data-width="${PokemonStatNumber / 2}%"></div>
           </div>
         </div>
   
@@ -319,13 +299,7 @@ function returnBigPokemonCardStatHTML(PokemonStatName, PokemonStatNumber, basicP
 }
 
 // renderBigPokemonCardEvoChain
-async function renderBigPokemonCardEvoChain(
-  PokemonName,
-  basicPokemonType,
-  PokemonImage,
-  i,
-  PokemonGif
-) {
+async function renderBigPokemonCardEvoChain(PokemonName, basicPokemonType, PokemonImage, i, PokemonGif) {
   addPopup();
   let bigPokemonCardMain = document.getElementById("big-pokemon-card-main");
   document.getElementById("evo-chain-li").classList.add("aktiv-li");
@@ -339,41 +313,22 @@ async function renderBigPokemonCardEvoChain(
   }
 
   // last if
-  checkIfNoPokemonEvoExists(
-    bigPokemonCardMain,
-    basicPokemonType,
-    PokemonName,
-    PokemonGif,
-    PokemonImage
-  );
+  checkIfNoPokemonEvoExists(bigPokemonCardMain, basicPokemonType, PokemonName, PokemonGif, PokemonImage);
 
   removePopup();
 }
 
-async function checkIfFirstPokemonEvoExists(
-  chain,
-  bigPokemonCardMain,
-  basicPokemonType,
-  i,
-  PokemonName
-) {
+async function checkIfFirstPokemonEvoExists(chain, bigPokemonCardMain, basicPokemonType, i, PokemonName) {
   // if 1
-  if (
-    chain["first-evolution"] === PokemonName ||
-    chain["second-evolution"] === PokemonName ||
-    chain["third-evolution"] === PokemonName
-  ) {
+  if (chain["first-evolution"] === PokemonName || chain["second-evolution"] === PokemonName || chain["third-evolution"] === PokemonName) {
+    console.log(chain);
+
     let firstPokemonJson = await getPokemonData("/" + chain["first-evolution"]);
     firstPokemonImage = firstPokemonJson["sprites"]["other"]["official-artwork"]["front_default"];
     let firstShinyPokemonGif = firstPokemonJson["sprites"]["other"]["showdown"]["front_shiny"];
     let firstPokemonGif = firstPokemonJson["sprites"]["other"]["showdown"]["front_default"];
     let firstPokemonSrc = firstPokemonGif;
-    if (
-      firstPokemonGif === "null" ||
-      firstPokemonGif === null ||
-      firstPokemonGif === undefined ||
-      firstPokemonGif === "undefined"
-    ) {
+    if (firstPokemonGif === "null" || firstPokemonGif === null || firstPokemonGif === undefined || firstPokemonGif === "undefined") {
       firstPokemonSrc = firstPokemonImage;
     }
     bigPokemonCardMain.innerHTML += /*html*/ `
@@ -390,32 +345,29 @@ async function checkIfFirstPokemonEvoExists(
 async function checkIfSecondPokemonEvoExists(chain, bigPokemonCardMain, basicPokemonType, i) {
   // if 2
   if (chain["second-evolution"]) {
-    let secondPokemonJson = await getPokemonData("/" + chain["second-evolution"]);
-    secondPokemonImage = secondPokemonJson["sprites"]["other"]["official-artwork"]["front_default"];
-    let secondShinyPokemonGif = secondPokemonJson["sprites"]["other"]["showdown"]["front_shiny"];
-    let secondPokemonGif = secondPokemonJson["sprites"]["other"]["showdown"]["front_default"];
-    let secondPokemonSrc = secondPokemonGif;
-    if (
-      secondPokemonGif === "null" ||
-      secondPokemonGif === null ||
-      secondPokemonGif === undefined ||
-      secondPokemonGif === "undefined"
-    ) {
-      secondPokemonSrc = secondPokemonImage;
-    }
-    bigPokemonCardMain.innerHTML += /*html*/ `
+    if (secondPokemonJson["sprites"]["other"]["official-artwork"]["front_default"]) {
+      let secondPokemonJson = await getPokemonData("/" + chain["second-evolution"]);
+      secondPokemonImage = secondPokemonJson["sprites"]["other"]["official-artwork"]["front_default"];
+      let secondShinyPokemonGif = secondPokemonJson["sprites"]["other"]["showdown"]["front_shiny"];
+      let secondPokemonGif = secondPokemonJson["sprites"]["other"]["showdown"]["front_default"];
+      let secondPokemonSrc = secondPokemonGif;
+      if (secondPokemonGif === "null" || secondPokemonGif === null || secondPokemonGif === undefined || secondPokemonGif === "undefined") {
+        secondPokemonSrc = secondPokemonImage;
+      }
+      bigPokemonCardMain.innerHTML += /*html*/ `
                 <svg style='fill: ${allTypes[basicPokemonType]}' class="big-pokemon-card-chain-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100" height="100">
                   <path  d="M5.59 7.41L7 6 13 12 7 18 5.59 16.59 10.17 12 5.59 7.41zM11.59 7.41L13 6 19 12 13 18 11.59 16.59 16.17 12 11.59 7.41z"/>
                 </svg>
-    
-              <div class='big-pokemon-card-chain-img-container' onclick='renderEvolution("${chain["second-evolution"]}",${i})'>
-                <img class='big-pokemon-card-chain-img' src="${secondPokemonSrc}" alt="${chain["second-evolution"]}" title="${chain["second-evolution"]}">
-                <p class='big-pokemon-card-chain-name' style='color: ${allTypes[basicPokemonType]}'>${chain["second-evolution"]}</p>
-              </div>
+                
+                <div class='big-pokemon-card-chain-img-container' onclick='renderEvolution("${chain["second-evolution"]}",${i})'>
+                  <img class='big-pokemon-card-chain-img' src="${secondPokemonSrc}" alt="${chain["second-evolution"]}" title="${chain["second-evolution"]}">
+                  <p class='big-pokemon-card-chain-name' style='color: ${allTypes[basicPokemonType]}'>${chain["second-evolution"]}</p>
+                </div>
                 `;
 
-    // if 3
-    checkIfThirdPokemonEvoExists(chain, bigPokemonCardMain, basicPokemonType, i);
+      // if 3
+      checkIfThirdPokemonEvoExists(chain, bigPokemonCardMain, basicPokemonType, i);
+    }
   }
 }
 
@@ -427,12 +379,7 @@ async function checkIfThirdPokemonEvoExists(chain, bigPokemonCardMain, basicPoke
     let thirdShinyPokemonGif = thirdPokemonJson["sprites"]["other"]["showdown"]["front_shiny"];
     let thirdPokemonGif = thirdPokemonJson["sprites"]["other"]["showdown"]["front_default"];
     let thirdPokemonSrc = thirdPokemonGif;
-    if (
-      thirdPokemonGif === "null" ||
-      thirdPokemonGif === null ||
-      thirdPokemonGif === undefined ||
-      thirdPokemonGif === "undefined"
-    ) {
+    if (thirdPokemonGif === "null" || thirdPokemonGif === null || thirdPokemonGif === undefined || thirdPokemonGif === "undefined") {
       thirdPokemonSrc = thirdPokemonImage;
     }
     bigPokemonCardMain.innerHTML += /*html*/ `
@@ -448,22 +395,11 @@ async function checkIfThirdPokemonEvoExists(chain, bigPokemonCardMain, basicPoke
   }
 }
 
-async function checkIfNoPokemonEvoExists(
-  bigPokemonCardMain,
-  basicPokemonType,
-  PokemonName,
-  PokemonGif,
-  PokemonImage
-) {
+async function checkIfNoPokemonEvoExists(bigPokemonCardMain, basicPokemonType, PokemonName, PokemonGif, PokemonImage) {
   // last if
   if (bigPokemonCardMain.innerHTML === "") {
     let PokemonSrc = PokemonGif;
-    if (
-      PokemonGif === "null" ||
-      PokemonGif === null ||
-      PokemonGif === undefined ||
-      PokemonGif === "undefined"
-    ) {
+    if (PokemonGif === "null" || PokemonGif === null || PokemonGif === undefined || PokemonGif === "undefined") {
       PokemonSrc = PokemonImage;
     }
     bigPokemonCardMain.innerHTML = /*html*/ `

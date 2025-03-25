@@ -47,6 +47,7 @@ body .bg-op-0 {
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  gap: 10px;
 }
 
 .f-sa {
@@ -221,6 +222,13 @@ main {
 .number-of-pokemon {
   font-size: 25px;
   text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.pokemon-card-name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
 }
 
 .pokemon-card-img {
@@ -626,7 +634,7 @@ body .big-pokemon-card-chain-container {
   padding: 16px 28px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
+  /* display: inline-block; */
   font-size: 18px;
   margin: 40px auto;
   cursor: pointer;
@@ -661,6 +669,25 @@ footer {
   width: 100%;
 }
 
+#top-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  cursor: pointer;
+
+  height: 50px;
+  width: 50px;
+
+  color: white;
+  filter: brightness(0) invert(1);
+
+  transition: 0.2s ease-in-out;
+}
+
+#top-button:hover {
+  transform: scale(1.1);
+}
+
 /* loading popup */
 
 .loading-popup-container {
@@ -686,8 +713,15 @@ footer {
 }
 
 .loading-popup {
-  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 
+  gap: 40px;
+}
+
+.loading-popup-ball {
   transform: scale(0);
 
   transition: 0.2s ease-in-out;
@@ -705,6 +739,21 @@ footer {
   border-radius: 100%;
 
   z-index: 9999;
+
+  animation: spin 2s linear infinite;
+}
+
+.loading-popup-bar {
+  width: 100%;
+  height: 10px;
+  background-color: hsl(210, 29%, 29%);
+  border-radius: 10px;
+}
+
+.loading-popup-bar-fill {
+  height: 10px;
+  background-color: hsl(210, 100%, 64%);
+  border-radius: 10px;
 }
 
 @keyframes spin {
@@ -718,8 +767,10 @@ footer {
 
 body .popup-scale-1 {
   transform: scale(1);
+}
 
-  animation: spin 2s linear infinite;
+.popup-scale-0 {
+  transform: scale(0);
 }
 
 #loading-img {

@@ -50,12 +50,13 @@ allEvoChains = [];
 
 rendertPokemons = [];
 
-saveAllPokemonNames();
-saveAllPokemonEvoChainIDs();
-
+let timeout;
 // init
 async function init() {
   addPopup();
+  await saveAllPokemonNames();
+  await saveAllPokemonEvoChainIDs();
+
   document.getElementById("error").classList.add("d-none");
   numberOfPokemons = 18;
   rendertPokemons = allPokemons;
@@ -68,17 +69,32 @@ async function init() {
 
 // get pokemon data
 async function getPokemonData(path = "", API = BASE_API) {
-  let response = await fetch(API + path);
-  let responseToJson = await response.json();
-  return responseToJson;
+  try {
+    if (path === "/undefined") {
+      return;
+    }
+    let response = await fetch(API + path);
+
+    let responseToJson = await response.json();
+    return responseToJson;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 // save all pokemon names
 async function saveAllPokemonNames() {
+  resetLoadingPopupBarFill();
+
+  let loadingPopupBarFill = document.getElementById("loading-popup-bar-fill");
+  loadingPopupBarFill.style.transition = "width 1s ease-in-out, background-color 1s ease-in-out";
+
   let getPokemonJson = await getPokemonData("?limit=100000&offset=0");
   let numberOfAllPokemons = getPokemonJson["results"];
 
   for (let i = 0; i < numberOfAllPokemons.length; i++) {
+    updateLoadingPopupBarFill(i, numberOfAllPokemons.length);
+
     let pokemonName = numberOfAllPokemons[i]["name"];
     allPokemons.push(pokemonName);
   }
@@ -112,17 +128,7 @@ async function saveAllPokemonEvoChainIDs() {
 
 // check i
 function checkI(i) {
-  return (
-    i === 209 ||
-    i === 221 ||
-    i === 224 ||
-    i === 225 ||
-    i === 226 ||
-    i === 230 ||
-    i === 237 ||
-    i === 250 ||
-    i === null
-  );
+  return i === 209 || i === 221 || i === 224 || i === 225 || i === 226 || i === 230 || i === 237 || i === 250 || i === null;
 }
 
 // search pokemon
@@ -131,9 +137,17 @@ async function searchPokemon() {
   document.getElementById("search-bar").disabled = true;
   numberOfPokemons = 18;
   let searchBarValue = document.getElementById("search-bar").value.trim().toLowerCase();
-  let filteredPokemons = allPokemons.filter((pokemon) =>
-    pokemon.toLowerCase().startsWith(searchBarValue)
-  );
+  let filteredPokemons = allPokemons.filter((pokemon) => pokemon.toLowerCase().includes(searchBarValue));
+
+  if (filteredPokemons.length > numberOfPokemons) {
+    showLoadMoreButton();
+    console.log("show");
+  } else {
+    hideLoadMoreButton();
+    console.log("hide");
+  }
+  console.log(filteredPokemons.length);
+
   rendertPokemons = filteredPokemons;
   if (searchBarValue === "") {
     rendertPokemons = allPokemons;
@@ -166,7 +180,40 @@ function addPopup() {
 
 function removePopup() {
   document.getElementById("loading-popup").classList.remove("popup-scale-1");
-  document
-    .getElementById("loading-popup-container")
-    .classList.remove("show-loading-popup-container");
+  document.getElementById("loading-popup-container").classList.remove("show-loading-popup-container");
+
+  resetLoadingPopupBarFill();
+}
+
+function resetLoadingPopupBarFill() {
+  let loadingPopupBarFill = document.getElementById("loading-popup-bar-fill");
+  loadingPopupBarFill.style.width = "0%";
+  loadingPopupBarFill.style.backgroundColor = "hsl(210, 100%, 64%)";
+  loadingPopupBarFill.style.transition = "width 0s ease-in-out, background-color 1s ease-in-out";
+  clearTimeout(timeout);
+}
+
+function updateLoadingPopupBarFill(i, arrayLength) {
+  let loadingPopupBarFill = document.getElementById("loading-popup-bar-fill");
+  loadingPopupBarFill.style.width = `${(i / arrayLength) * 100}%`;
+
+  timeout = setTimeout(() => {
+    loadingPopupBarFill.style.backgroundColor = `hsl(${i * 10}, 100%, 64%)`;
+  }, 2000);
+}
+
+function scrollToBottom() {
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
+function scrollToTop() {
+  window.scrollTo(0, 0);
+}
+
+function showLoadMoreButton() {
+  document.getElementById("load-more-button").classList.remove("d-none");
+}
+
+function hideLoadMoreButton() {
+  document.getElementById("load-more-button").classList.add("d-none");
 }
