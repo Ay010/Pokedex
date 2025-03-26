@@ -22,6 +22,17 @@ let pokemonImages = [
 ];
 
 let currentIndex = 0;
+let animationInterval;
+let preloadedImages = [];
+
+// Lade alle Bilder vor
+function preloadImages() {
+  pokemonImages.forEach((src) => {
+    const img = new Image();
+    img.src = src;
+    preloadedImages.push(img);
+  });
+}
 
 // img animation
 function nextIcon() {
@@ -49,11 +60,26 @@ function nextIcon() {
       pokemonImg.src = pokemonImages[currentIndex];
       pokemonImg.classList.remove("go-up-from-middle");
       nextPokemonImg.classList.remove("go-back-from-bottom");
-      nextPokemonImg.src = pokemonImages[currentIndex + 1];
+      if (currentIndex + 1 < pokemonImages.length) {
+        nextPokemonImg.src = pokemonImages[currentIndex + 1];
+      } else {
+        nextPokemonImg.src = pokemonImages[0];
+      }
     }, 2000);
   }
 }
 
 function startAnimation() {
-  setInterval(nextIcon, 4000);
+  // Lade Bilder vor dem Start
+  preloadImages();
+
+  // Starte die Animation
+  animationInterval = setInterval(nextIcon, 4000);
+}
+
+function stopAnimation() {
+  if (animationInterval) {
+    clearInterval(animationInterval);
+    animationInterval = null;
+  }
 }

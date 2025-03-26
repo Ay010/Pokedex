@@ -94,44 +94,56 @@ async function getPokemonData(path = "", API = BASE_API) {
 // save all pokemon names
 async function saveAllPokemonNames() {
   resetLoadingPopupBarFill();
-
   let loadingPopupBarFill = document.getElementById("loading-popup-bar-fill");
   loadingPopupBarFill.style.transition = "width 1s ease-in-out, background-color 1s ease-in-out";
 
   let getPokemonJson = await getPokemonData("?limit=100000&offset=0");
   let numberOfAllPokemons = getPokemonJson["results"];
 
-  for (let i = 0; i < numberOfAllPokemons.length; i++) {
-    updateLoadingPopupBarFill(i, numberOfAllPokemons.length);
-
-    let pokemonName = numberOfAllPokemons[i]["name"];
-    allPokemons.push(pokemonName);
+  // Parallele Verarbeitung der Pokémon-Namen
+  const batchSize = 50; // Anzahl der parallelen Anfragen
+  for (let i = 0; i < numberOfAllPokemons.length; i += batchSize) {
+    const batch = numberOfAllPokemons.slice(i, i + batchSize);
+    const promises = batch.map((pokemon) => {
+      allPokemons.push(pokemon.name);
+      updateLoadingPopupBarFill(i + batch.indexOf(pokemon), numberOfAllPokemons.length);
+    });
+    await Promise.all(promises);
   }
 }
 
 // save all pokemon evo chain IDs
 async function saveAllPokemonEvoChainIDs() {
   let getPokemonJson = await getPokemonData("", EVO_API + "/" + "?offset=0&limit=100000000");
-  for (let i = 0; i < getPokemonJson["results"].length; i++) {
-    if (checkI(i)) {
-      continue;
-    }
-    let getChain = await getPokemonData("", EVO_API + "/" + (i + 1));
-    let PokemonSpecies = getChain["chain"]["species"]["name"];
-    let PokemonEvolvesTo;
-    let PokemonEvolvesLast;
+  const results = getPokemonJson["results"];
 
-    if (getChain["chain"]["evolves_to"][0]) {
-      PokemonEvolvesTo = getChain["chain"]["evolves_to"][0]["species"]["name"];
-      if (getChain["chain"]["evolves_to"][0]["evolves_to"][0]) {
-        PokemonEvolvesLast = getChain["chain"]["evolves_to"][0]["evolves_to"][0]["species"]["name"];
+  // Parallele Verarbeitung der Evolutionsketten
+  const batchSize = 20; // Kleinere Batch-Größe wegen komplexerer Daten
+  for (let i = 0; i < results.length; i += batchSize) {
+    const batch = results.slice(i, i + batchSize);
+    const promises = batch.map(async (_, index) => {
+      const currentIndex = i + index;
+      if (checkI(currentIndex)) return;
+
+      const getChain = await getPokemonData("", EVO_API + "/" + (currentIndex + 1));
+      const PokemonSpecies = getChain["chain"]["species"]["name"];
+      let PokemonEvolvesTo;
+      let PokemonEvolvesLast;
+
+      if (getChain["chain"]["evolves_to"][0]) {
+        PokemonEvolvesTo = getChain["chain"]["evolves_to"][0]["species"]["name"];
+        if (getChain["chain"]["evolves_to"][0]["evolves_to"][0]) {
+          PokemonEvolvesLast = getChain["chain"]["evolves_to"][0]["evolves_to"][0]["species"]["name"];
+        }
       }
-    }
-    allEvoChains.push({
-      "first-evolution": PokemonSpecies,
-      "second-evolution": allPokemons.includes(PokemonEvolvesTo) ? PokemonEvolvesTo : undefined,
-      "third-evolution": allPokemons.includes(PokemonEvolvesLast) ? PokemonEvolvesLast : undefined,
+
+      allEvoChains.push({
+        "first-evolution": PokemonSpecies,
+        "second-evolution": allPokemons.includes(PokemonEvolvesTo) ? PokemonEvolvesTo : undefined,
+        "third-evolution": allPokemons.includes(PokemonEvolvesLast) ? PokemonEvolvesLast : undefined,
+      });
     });
+    await Promise.all(promises);
   }
 }
 
@@ -150,12 +162,9 @@ async function searchPokemon() {
 
   if (filteredPokemons.length > numberOfPokemons) {
     showLoadMoreButton();
-    console.log("show");
   } else {
     hideLoadMoreButton();
-    console.log("hide");
   }
-  console.log(filteredPokemons.length);
 
   rendertPokemons = filteredPokemons;
   if (searchBarValue === "") {

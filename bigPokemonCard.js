@@ -321,8 +321,6 @@ async function renderBigPokemonCardEvoChain(PokemonName, basicPokemonType, Pokem
 async function checkIfFirstPokemonEvoExists(chain, bigPokemonCardMain, basicPokemonType, i, PokemonName) {
   // if 1
   if (chain["first-evolution"] === PokemonName || chain["second-evolution"] === PokemonName || chain["third-evolution"] === PokemonName) {
-    console.log(chain);
-
     let firstPokemonJson = await getPokemonData("/" + chain["first-evolution"]);
     firstPokemonImage = firstPokemonJson["sprites"]["other"]["official-artwork"]["front_default"];
     let firstShinyPokemonGif = firstPokemonJson["sprites"]["other"]["showdown"]["front_shiny"];
