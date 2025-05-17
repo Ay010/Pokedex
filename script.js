@@ -101,7 +101,7 @@ async function saveAllPokemonNames() {
   let numberOfAllPokemons = getPokemonJson["results"];
 
   // Parallele Verarbeitung der Pokémon-Namen
-  const batchSize = 100; // Anzahl der parallelen Anfragen
+  const batchSize = 300; // Anzahl der parallelen Anfragen
   for (let i = 0; i < numberOfAllPokemons.length; i += batchSize) {
     const batch = numberOfAllPokemons.slice(i, i + batchSize);
     const promises = batch.map((pokemon) => {
@@ -118,7 +118,7 @@ async function saveAllPokemonEvoChainIDs() {
   const results = getPokemonJson["results"];
 
   // Parallele Verarbeitung der Evolutionsketten
-  const batchSize = 80; // Kleinere Batch-Größe wegen komplexerer Daten
+  const batchSize = 100; // Kleinere Batch-Größe wegen komplexerer Daten
   for (let i = 0; i < results.length; i += batchSize) {
     const batch = results.slice(i, i + batchSize);
     const promises = batch.map(async (_, index) => {
